@@ -117,11 +117,12 @@ function getID($param = 'id', $clean = true)
  *
  * @author Andreas Gohr <andi@splitbrain.org>
  *
- * @param  string  $raw_id    The pageid to clean
- * @param  boolean $ascii     Force ASCII
+ * @param  string  $raw_id           The pageid to clean
+ * @param  boolean $ascii            Force ASCII
+ * @param  boolean $never_romanize   Dont use romanize function
  * @return string cleaned id
  */
-function cleanID($raw_id, $ascii = false)
+function cleanID($raw_id, $ascii = false, $never_romanize = false)
 {
     global $conf;
     static $sepcharpat = null;
@@ -148,7 +149,7 @@ function cleanID($raw_id, $ascii = false)
         $id = strtr($id, ';/', ':' . $sepchar);
     }
 
-    if ($conf['deaccent'] == 2 || $ascii) $id = Clean::romanize($id);
+    if (($conf['deaccent'] == 2 || $ascii) and !$never_romanize) $id = Clean::romanize($id);
     if ($conf['deaccent'] || $ascii) $id = Clean::deaccent($id, -1);
 
     //remove specials
